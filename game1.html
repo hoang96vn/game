@@ -109,7 +109,12 @@ for (let i = 1; i < snake.length; i++) {
 }
 // Vẽ mồi bằng hình ảnh PNG
 ctx.drawImage(foodImg, food.x, food.y, box, box);
-
+if (snakeHeadImg.complete) {
+  ctx.drawImage(snakeHeadImg, snake[0].x, snake[0].y, box, box);
+}
+      if (foodImg.complete) {
+  ctx.drawImage(foodImg, food.x, food.y, box, box);
+}
       // Di chuyển
       let headX = snake[0].x;
       let headY = snake[0].y;
@@ -209,6 +214,11 @@ ctx.drawImage(foodImg, food.x, food.y, box, box);
     snakeHeadImg.onload = () => {
   // ảnh sẵn sàng, người chơi có thể bắt đầu
 };
+    score++;
+document.getElementById("score").textContent = "Điểm: " + score;
+// hiệu ứng nhỏ
+canvas.style.borderColor = "#ff6347";
+setTimeout(() => canvas.style.borderColor = "#4CAF50", 100);
   </script>
 </body>
 </html>
