@@ -120,13 +120,14 @@ ctx.drawImage(foodImg, food.x, food.y, box, box);
       if (direction === "UP") headY -= box;
       if (direction === "DOWN") headY += box;
 
-      const newHead = { x: headX, y: headY };
+    const newHead = { x: headX, y: headY };
+snake.unshift(newHead); // thêm đầu mới vào
 
-      if (
-        headX < 0 || headX >= canvasSize ||
-        headY < 0 || headY >= canvasSize ||
-        collision(newHead, snake)
-      ) {
+if (
+  headX < 0 || headX >= canvasSize ||
+  headY < 0 || headY >= canvasSize ||
+  collision(newHead, snake.slice(1)) // kiểm tra va vào thân (bỏ đầu)
+) {
         clearInterval(game);
         const playerName = document.getElementById("playerName").value || "Vô danh";
 
@@ -144,6 +145,7 @@ ctx.drawImage(foodImg, food.x, food.y, box, box);
       }
 
     // Ăn thức ăn
+// Ăn thức ăn
 if (headX === food.x && headY === food.y) {
   score++;
   document.getElementById("score").textContent = "Điểm: " + score;
