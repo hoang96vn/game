@@ -47,7 +47,7 @@
   <input type="text" id="playerName" placeholder="Nhập tên bạn" />
   <div id="score">Điểm: 0</div>
   <div id="highScore">🏆 Kỷ lục: chưa có</div>
-  <button id="startBtn" onclick="startGame()">▶ Bắt đầu chơi</button>
+  <button id="startBtn">▶ Bắt đầu chơi</button>
   <canvas id="gameCanvas" width="600" height="600"></canvas>
   <div id="leaderboard"></div>
 
@@ -197,6 +197,7 @@ function renderLeaderboard(leaderboard) {
     boardDiv.innerHTML += `<div>${index + 1}. ${player.name} - ${player.score} điểm</div>`;
   });
 }
+      document.getElementById("startBtn").addEventListener("click", startGame);
   </script>
 </body>
 </html>
