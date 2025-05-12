@@ -144,14 +144,18 @@ if (snakeHeadImg.complete) {
         return;
       }
 
-      // Ăn thức ăn
-      if (headX === food.x && headY === food.y) {
-        score++;
-        document.getElementById("score").textContent = "Điểm: " + score;
-        food = spawnFood();
-      } else {
-        snake.pop();
-      }
+    // Ăn thức ăn
+if (headX === food.x && headY === food.y) {
+  score++;
+  document.getElementById("score").textContent = "Điểm: " + score;
+  food = spawnFood();
+
+  // 🎉 hiệu ứng khi ăn mồi
+  canvas.style.borderColor = "#ff6347";
+  setTimeout(() => canvas.style.borderColor = "#4CAF50", 100);
+} else {
+  snake.pop();
+}
 
       snake.unshift(newHead);
     }
