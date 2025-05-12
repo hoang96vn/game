@@ -22,14 +22,28 @@
       font-size: 20px;
       margin-bottom: 10px;
     }
+    #playerName {
+  padding: 8px;
+  font-size: 16px;
+  margin: 10px;
+}
+#highScore {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
+}
   </style>
 </head>
 <body>
   <h1>🐍 Game Rắn Săn Mồi</h1>
   <div id="score">Điểm: 0</div>
+  <input type="text" id="playerName" placeholder="Tên bạn" />
+<div id="highScore">🏆 Kỷ lục: chưa có</div>
   <canvas id="gameCanvas" width="400" height="400"></canvas>
 
   <script>
+    let highScore = JSON.parse(localStorage.getItem("snakeHighScore")) || { name: "-", score: 0 };
+document.getElementById("highScore").textContent = `🏆 Kỷ lục: ${highScore.name} - ${highScore.score} điểm`;
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -74,7 +88,14 @@
         collision(newHead, snake)
       ) {
         clearInterval(game);
-        alert("💥 Thua rồi! Điểm của bạn: " + score);
+        if (score > highScore.score) {
+  const playerName = document.getElementById("playerName").value || "Vô danh";
+  highScore = { name: playerName, score };
+  localStorage.setItem("snakeHighScore", JSON.stringify(highScore));
+  alert(`🎉 Kỷ lục mới! ${playerName} đạt ${score} điểm`);
+} else {
+  alert(`💥 Thua rồi! Điểm của bạn: ${score}`);
+}
         location.reload();
         return;
       }
