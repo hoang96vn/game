@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>🐍 Snake Game - Đẹp hơn</title>
+  <title>🐍 Rắn Săn Mồi t</title>
   <style>
     body {
       text-align: center;
@@ -26,33 +26,49 @@
       background-color: #222;
       border: 4px solid #4CAF50;
       margin: 20px auto;
-      display: block;
+      display: none;
+    }
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #startBtn:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
-  <h1>🐍 Rắn Săn Mồi Đẹp Hơn</h1>
+  <h1>🐍 Rắn Săn Mồi</h1>
   <input type="text" id="playerName" placeholder="Nhập tên bạn" />
   <div id="score">Điểm: 0</div>
   <div id="highScore">🏆 Kỷ lục: chưa có</div>
+  <button id="startBtn" onclick="startGame()">▶ Bắt đầu chơi</button>
   <canvas id="gameCanvas" width="400" height="400"></canvas>
 
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-
     const box = 20;
     const canvasSize = 400;
     const rows = canvasSize / box;
     const cols = canvasSize / box;
 
-    let snake = [{ x: 9 * box, y: 9 * box }];
-    let direction = "RIGHT";
-    let food = spawnFood();
-    let score = 0;
-
+    let snake, direction, food, score, game;
     let highScore = JSON.parse(localStorage.getItem("snakeHighScore")) || { name: "-", score: 0 };
     document.getElementById("highScore").textContent = `🏆 Kỷ lục: ${highScore.name} - ${highScore.score} điểm`;
+
+    function initGame() {
+      snake = [{ x: 9 * box, y: 9 * box }];
+      direction = "RIGHT";
+      food = spawnFood();
+      score = 0;
+      document.getElementById("score").textContent = "Điểm: 0";
+    }
 
     function drawRoundedRect(x, y, w, h, radius, color) {
       ctx.fillStyle = color;
@@ -74,7 +90,7 @@
 
       // Vẽ rắn
       for (let i = 0; i < snake.length; i++) {
-        let color = i === 0 ? "#7CFC00" : "#32CD32"; // Đầu sáng hơn
+        let color = i === 0 ? "#7CFC00" : "#32CD32";
         drawRoundedRect(snake[i].x, snake[i].y, box, box, 5, color);
       }
 
@@ -95,7 +111,6 @@
 
       const newHead = { x: headX, y: headY };
 
-      // Va chạm
       if (
         headX < 0 || headX >= canvasSize ||
         headY < 0 || headY >= canvasSize ||
@@ -114,7 +129,7 @@
         return;
       }
 
-      // Ăn
+      // Ăn thức ăn
       if (headX === food.x && headY === food.y) {
         score++;
         document.getElementById("score").textContent = "Điểm: " + score;
@@ -144,7 +159,12 @@
       else if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
     });
 
-    const game = setInterval(drawGame, 100);
+    function startGame() {
+      document.getElementById("startBtn").style.display = "none";
+      canvas.style.display = "block";
+      initGame();
+      game = setInterval(drawGame, 100);
+    }
   </script>
 </body>
 </html>
