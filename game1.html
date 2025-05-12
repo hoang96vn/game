@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>🐍 Rắn Săn Mồi t</title>
+  <title>🐍 Rắn Săn Mồi</title>
   <style>
     body {
       text-align: center;
@@ -118,21 +118,17 @@
         collision(newHead, snake)
       ) {
         clearInterval(game);
+        const playerName = document.getElementById("playerName").value || "Vô danh";
+
         if (score > highScore.score) {
-          const playerName = document.getElementById("playerName").value || "Vô danh";
           highScore = { name: playerName, score };
           localStorage.setItem("snakeHighScore", JSON.stringify(highScore));
-          if (score > highScore.score) {
-  const playerName = document.getElementById("playerName").value || "Vô danh";
-  highScore = { name: playerName, score };
-  localStorage.setItem("snakeHighScore", JSON.stringify(highScore));
-  saveHighScore(playerName, score);
-  alert(`🎉 Kỷ lục mới! ${playerName} đạt ${score} điểm`);
-} else {
-  const playerName = document.getElementById("playerName").value || "Vô danh";
-  saveHighScore(playerName, score);
-  alert(`💥 Thua rồi! Điểm của bạn: ${score}`);
-}
+          saveHighScore(playerName, score);
+          alert(`🎉 Kỷ lục mới! ${playerName} đạt ${score} điểm`);
+        } else {
+          saveHighScore(playerName, score);
+          alert(`💥 Thua rồi! Điểm của bạn: ${score}`);
+        }
         location.reload();
         return;
       }
@@ -168,37 +164,39 @@
     });
 
     function startGame() {
-  renderLeaderboard(JSON.parse(localStorage.getItem("leaderboard")) || []);
-  document.getElementById("startBtn").style.display = "none";
-  canvas.style.display = "block";
-  initGame();
-  game = setInterval(drawGame, 100);
-}
+      renderLeaderboard(JSON.parse(localStorage.getItem("leaderboard")) || []);
+      document.getElementById("startBtn").style.display = "none";
+      canvas.style.display = "block";
+      initGame();
+      game = setInterval(drawGame, 100);
+    }
+
     function saveHighScore(name, score) {
-  let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-  let existing = leaderboard.find(p => p.name === name);
+      let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+      let existing = leaderboard.find(p => p.name === name);
 
-  if (existing) {
-    if (score > existing.score) existing.score = score;
-  } else {
-    leaderboard.push({ name, score });
-  }
+      if (existing) {
+        if (score > existing.score) existing.score = score;
+      } else {
+        leaderboard.push({ name, score });
+      }
 
-  leaderboard.sort((a, b) => b.score - a.score);
-  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-  renderLeaderboard(leaderboard);
-}
+      leaderboard.sort((a, b) => b.score - a.score);
+      localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+      renderLeaderboard(leaderboard);
+    }
 
-function renderLeaderboard(leaderboard) {
-  const boardDiv = document.getElementById("leaderboard");
-  boardDiv.innerHTML = "<h3>🏆 Bảng xếp hạng</h3>";
-  leaderboard.slice(0, 5).forEach((player, index) => {
-    boardDiv.innerHTML += `<div>${index + 1}. ${player.name} - ${player.score} điểm</div>`;
-  });
-}
-     window.onload = () => {
-  document.getElementById("startBtn").addEventListener("click", startGame);
-};
+    function renderLeaderboard(leaderboard) {
+      const boardDiv = document.getElementById("leaderboard");
+      boardDiv.innerHTML = "<h3>🏆 Bảng xếp hạng</h3>";
+      leaderboard.slice(0, 5).forEach((player, index) => {
+        boardDiv.innerHTML += `<div>${index + 1}. ${player.name} - ${player.score} điểm</div>`;
+      });
+    }
+
+    window.onload = () => {
+      document.getElementById("startBtn").addEventListener("click", startGame);
+    };
   </script>
 </body>
 </html>
