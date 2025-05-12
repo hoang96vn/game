@@ -167,14 +167,13 @@
       else if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
     });
 
-    function startGame()
-      renderLeaderboard(JSON.parse(localStorage.getItem("leaderboard")) || []);
-      {
-      document.getElementById("startBtn").style.display = "none";
-      canvas.style.display = "block";
-      initGame();
-      game = setInterval(drawGame, 100);
-    }
+    function startGame() {
+  renderLeaderboard(JSON.parse(localStorage.getItem("leaderboard")) || []);
+  document.getElementById("startBtn").style.display = "none";
+  canvas.style.display = "block";
+  initGame();
+  game = setInterval(drawGame, 100);
+}
     function saveHighScore(name, score) {
   let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
   let existing = leaderboard.find(p => p.name === name);
@@ -197,7 +196,9 @@ function renderLeaderboard(leaderboard) {
     boardDiv.innerHTML += `<div>${index + 1}. ${player.name} - ${player.score} điểm</div>`;
   });
 }
-      document.getElementById("startBtn").addEventListener("click", startGame);
+     window.onload = () => {
+  document.getElementById("startBtn").addEventListener("click", startGame);
+};
   </script>
 </body>
 </html>
