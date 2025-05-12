@@ -54,6 +54,8 @@
   <script>
     let snakeHeadImg = new Image();
     snakeHeadImg.src = "https://hoang96vn.github.io/game/head.png";
+    let snakeBodyImg = new Image();
+snakeBodyImg.src = "https://hoang96vn.github.io/game/heart.png"; // ảnh trái tim
     let foodImg = new Image();
 foodImg.src = "https://hoang96vn.github.io/game/food.png";
 
@@ -97,15 +99,10 @@ foodImg.src = "https://hoang96vn.github.io/game/food.png";
    // Vẽ đầu rắn bằng hình ảnh
 ctx.drawImage(snakeHeadImg, snake[0].x, snake[0].y, box, box);
 
-// Vẽ thân rắn bằng hình tròn
 for (let i = 1; i < snake.length; i++) {
-  ctx.beginPath();
-  ctx.arc(snake[i].x + box / 2, snake[i].y + box / 2, box / 2 - 1, 0, Math.PI * 2);
-  ctx.fillStyle = "#33cc99";
-  ctx.shadowColor = "#222";
-  ctx.shadowBlur = 4;
-  ctx.fill();
-  ctx.shadowBlur = 0;
+  if (snakeBodyImg.complete) {
+    ctx.drawImage(snakeBodyImg, snake[i].x, snake[i].y, box, box);
+  }
 }
 // Vẽ mồi bằng hình ảnh PNG
 ctx.drawImage(foodImg, food.x, food.y, box, box);
