@@ -121,35 +121,46 @@ ctx.drawImage(foodImg, food.x, food.y, box, box);
       if (direction === "DOWN") headY += box;
 
     const newHead = { x: headX, y: headY };
-snake.unshift(newHead); // thêm đầu mới vào
+snake.unshift(newHead); // thêm đầu mới
 
+// Kiểm tra va chạm
 if (
   headX < 0 || headX >= canvasSize ||
   headY < 0 || headY >= canvasSize ||
-  collision(newHead, snake.slice(1)) // kiểm tra va vào thân (bỏ đầu)
+  collision(newHead, snake.slice(1)) // kiểm tra va vào thân
 ) {
-        clearInterval(game);
-        const playerName = document.getElementById("playerName").value || "Vô danh";
+  clearInterval(game);
+  const playerName = document.getElementById("playerName").value || "Vô danh";
 
-        if (score > highScore.score) {
-          highScore = { name: playerName, score };
-          localStorage.setItem("snakeHighScore", JSON.stringify(highScore));
-          saveHighScore(playerName, score);
-          alert(`🎉 Kỷ lục mới! ${playerName} đạt ${score} điểm`);
-        } else {
-          saveHighScore(playerName, score);
-          alert(`💥 Thua rồi! Điểm của bạn: ${score}`);
-        }
-        location.reload();
-        return;
-      }
+  if (score > highScore.score) {
+    highScore = { name: playerName, score };
+    localStorage.setItem("snakeHighScore", JSON.stringify(highScore));
+    saveHighScore(playerName, score);
+    alert(`🎉 Kỷ lục mới! ${playerName} đạt ${score} điểm`);
+  } else {
+    saveHighScore(playerName, score);
+    alert(`💥 Thua rồi! Điểm của bạn: ${score}`);
+  }
 
-    // Ăn thức ăn
+  location.reload();
+  return;
+}
+
 // Ăn thức ăn
 if (headX === food.x && headY === food.y) {
   score++;
   document.getElementById("score").textContent = "Điểm: " + score;
   food = spawnFood();
+
+  canvas.style.borderColor = "#ff6347";
+  canvas.classList.add("shake");
+  setTimeout(() => {
+    canvas.style.borderColor = "#4CAF50";
+    canvas.classList.remove("shake");
+  }, 150);
+} else {
+  snake.pop(); // chỉ bỏ đuôi nếu không ăn
+}
 
   // 🎉 hiệu ứng khi ăn mồi
   canvas.style.borderColor = "#ff6347";
