@@ -104,73 +104,68 @@ foodImg.src = "https://hoang96vn.github.io/game/food.png";
     }
 
     function drawGame() {
-      ctx.clearRect(0, 0, canvasSize, canvasSize);
+  ctx.clearRect(0, 0, canvasSize, canvasSize);
 
-ctx.drawImage(snakeHeadImg, snake[0].x, snake[0].y, box, box);
-for (let i = 1; i < snake.length; i++) {
-  ctx.drawImage(snakeBodyImg, snake[i].x, snake[i].y, box, box);
-}
-ctx.drawImage(foodImg, food.x, food.y, box, box);
-      // Di chuyển
-      let headX = snake[0].x;
-      let headY = snake[0].y;
-
-      if (direction === "LEFT") headX -= box;
-      if (direction === "RIGHT") headX += box;
-      if (direction === "UP") headY -= box;
-      if (direction === "DOWN") headY += box;
-
-    const newHead = { x: headX, y: headY };
-snake.unshift(newHead); // thêm đầu mới
-
-// Kiểm tra va chạm
-if (
-  headX < 0 || headX >= canvasSize ||
-  headY < 0 || headY >= canvasSize ||
-  collision(newHead, snake.slice(1)) // kiểm tra va vào thân
-) {
-  clearInterval(game);
-  const playerName = document.getElementById("playerName").value || "Vô danh";
-
-  if (score > highScore.score) {
-    highScore = { name: playerName, score };
-    localStorage.setItem("snakeHighScore", JSON.stringify(highScore));
-    saveHighScore(playerName, score);
-    alert(`🎉 Kỷ lục mới! ${playerName} đạt ${score} điểm`);
-  } else {
-    saveHighScore(playerName, score);
-    alert(`💥 Thua rồi! Điểm của bạn: ${score}`);
+  // Vẽ rắn
+  ctx.drawImage(snakeHeadImg, snake[0].x, snake[0].y, box, box);
+  for (let i = 1; i < snake.length; i++) {
+    ctx.drawImage(snakeBodyImg, snake[i].x, snake[i].y, box, box);
   }
 
-  location.reload();
-  return;
-}
+  // Vẽ thức ăn
+  ctx.drawImage(foodImg, food.x, food.y, box, box);
 
-// Ăn thức ăn
-if (headX === food.x && headY === food.y) {
-  score++;
-  document.getElementById("score").textContent = "Điểm: " + score;
-  food = spawnFood();
+  // Di chuyển
+  let headX = snake[0].x;
+  let headY = snake[0].y;
+  if (direction === "LEFT") headX -= box;
+  if (direction === "RIGHT") headX += box;
+  if (direction === "UP") headY -= box;
+  if (direction === "DOWN") headY += box;
 
-  canvas.style.borderColor = "#ff6347";
-  canvas.classList.add("shake");
-  setTimeout(() => {
-    canvas.style.borderColor = "#4CAF50";
-    canvas.classList.remove("shake");
-  }, 150);
-} else {
-  snake.pop(); // chỉ bỏ đuôi nếu không ăn
-}
+  const newHead = { x: headX, y: headY };
 
-  // 🎉 hiệu ứng khi ăn mồi
-  canvas.style.borderColor = "#ff6347";
-  setTimeout(() => canvas.style.borderColor = "#4CAF50", 100);
-} else {
-  snake.pop();
-}
-
-      snake.unshift(newHead);
+  // Va chạm tường hoặc thân
+  if (
+    headX < 0 || headX >= canvasSize ||
+    headY < 0 || headY >= canvasSize ||
+    collision(newHead, snake)
+  ) {
+    clearInterval(game);
+    const playerName = document.getElementById("playerName").value || "Vô danh";
+    if (score > highScore.score) {
+      highScore = { name: playerName, score };
+      localStorage.setItem("snakeHighScore", JSON.stringify(highScore));
+      saveHighScore(playerName, score);
+      alert(`🎉 Kỷ lục mới! ${playerName} đạt ${score} điểm`);
+    } else {
+      saveHighScore(playerName, score);
+      alert(`💥 Thua rồi! Điểm của bạn: ${score}`);
     }
+    location.reload();
+    return;
+  }
+
+  // Ăn thức ăn
+  if (headX === food.x && headY === food.y) {
+    score++;
+    document.getElementById("score").textContent = "Điểm: " + score;
+    food = spawnFood();
+
+    // Hiệu ứng ăn mồi
+    canvas.style.borderColor = "#ff6347";
+    canvas.classList.add("shake");
+    setTimeout(() => {
+      canvas.style.borderColor = "#4CAF50";
+      canvas.classList.remove("shake");
+    }, 150);
+  } else {
+    snake.pop(); // không ăn thì bỏ đuôi
+  }
+
+  // Thêm đầu mới vào
+  snake.unshift(newHead);
+}
 
     function spawnFood() {
       return {
